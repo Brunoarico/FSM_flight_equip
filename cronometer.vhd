@@ -8,10 +8,7 @@ ENTITY cronometer IS
 		CLK : IN STD_LOGIC;
 		RST : IN STD_LOGIC;
 		HOLD : IN STD_LOGIC;
-		D_0 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-		D_1 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-		D_2 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-		D_3 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
+		tim : OUT INTEGER
 	);
 END cronometer;
 
@@ -19,10 +16,6 @@ ARCHITECTURE Behavioral OF cronometer IS
 	SIGNAL count : INTEGER := 0000;
 	SIGNAL countOut : INTEGER := 0000;
 	SIGNAL div : INTEGER := 0;
-	SIGNAL min_u : STD_LOGIC_VECTOR(3 DOWNTO 0);
-	SIGNAL min_d : STD_LOGIC_VECTOR(3 DOWNTO 0);
-	SIGNAL seg_u : STD_LOGIC_VECTOR(3 DOWNTO 0);
-	SIGNAL seg_d : STD_LOGIC_VECTOR(3 DOWNTO 0);
 	SIGNAL h : STD_LOGIC := '1';
 	SIGNAL reset : STD_LOGIC := '0';
 	CONSTANT frequency : INTEGER := 50000000;
@@ -65,9 +58,5 @@ BEGIN
 
 	END PROCESS;
 
-	conv : work.conv_MMSS PORT MAP (segs_in => countOut, min_u => min_u, min_d => min_d, seg_u => seg_u, seg_d => seg_d);
-	D_0 <= seg_u;
-	D_1 <= seg_d;
-	D_2 <= min_u;
-	D_3 <= min_d;
+	tim <= countOut;
 END Behavioral;
