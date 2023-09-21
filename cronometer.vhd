@@ -1,73 +1,73 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_ARITH.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.STD_LOGIC_ARITH.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
 
-entity cronometer is
-	Port (
-		CLK : in STD_LOGIC;
-		RST : in STD_LOGIC;
-		HOLD : in STD_LOGIC;
-		D_0 : out STD_LOGIC_VECTOR(3 downto 0);
-		D_1 : out STD_LOGIC_VECTOR(3 downto 0);
-		D_2 : out STD_LOGIC_VECTOR(3 downto 0);
-		D_3 : out STD_LOGIC_VECTOR(3 downto 0)
+ENTITY cronometer IS
+	PORT (
+		CLK : IN STD_LOGIC;
+		RST : IN STD_LOGIC;
+		HOLD : IN STD_LOGIC;
+		D_0 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+		D_1 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+		D_2 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+		D_3 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
 	);
-end cronometer;
+END cronometer;
 
-architecture Behavioral of cronometer is
-	signal count : integer := 0000;
-	signal countOut : integer := 0000;
-	signal div : integer := 0;
-	signal min_u : STD_LOGIC_VECTOR(3 downto 0);
-	signal min_d : STD_LOGIC_VECTOR(3 downto 0);
-	signal seg_u : STD_LOGIC_VECTOR(3 downto 0);
-	signal seg_d : STD_LOGIC_VECTOR(3 downto 0);
-	signal h : STD_LOGIC := '1';
-	signal reset : STD_LOGIC := '0';
-	constant frequency : integer := 50000000;
-begin
-	process(CLK, RST)
-	begin
-		if RST = '0' then
-		 	reset <= '1';
-		else
+ARCHITECTURE Behavioral OF cronometer IS
+	SIGNAL count : INTEGER := 0000;
+	SIGNAL countOut : INTEGER := 0000;
+	SIGNAL div : INTEGER := 0;
+	SIGNAL min_u : STD_LOGIC_VECTOR(3 DOWNTO 0);
+	SIGNAL min_d : STD_LOGIC_VECTOR(3 DOWNTO 0);
+	SIGNAL seg_u : STD_LOGIC_VECTOR(3 DOWNTO 0);
+	SIGNAL seg_d : STD_LOGIC_VECTOR(3 DOWNTO 0);
+	SIGNAL h : STD_LOGIC := '1';
+	SIGNAL reset : STD_LOGIC := '0';
+	CONSTANT frequency : INTEGER := 50000000;
+BEGIN
+	PROCESS (CLK, RST)
+	BEGIN
+		IF RST = '0' THEN
+			reset <= '1';
+		ELSE
 			reset <= '0';
-		end if;
+		END IF;
 
-		if rising_edge(CLK) then
+		IF rising_edge(CLK) THEN
 			div <= div + 1;
 
-			if reset = '1' then
+			IF reset = '1' THEN
 				count <= 0;
 				div <= 0;
-			end if;
+			END IF;
 
-			if div = frequency then
+			IF div = frequency THEN
 				count <= count + 1;
 				div <= 0;
-			end if;
+			END IF;
 
-		end if;
-	end process;
+		END IF;
+	END PROCESS;
 
-	process (HOLD)
-	begin
-		if rising_edge(HOLD) then
-			h <= not h;
-		end if;
+	PROCESS (HOLD)
+	BEGIN
+		IF rising_edge(HOLD) THEN
+			h <= NOT h;
+		END IF;
 
-		if h = '1' then
+		IF h = '1' THEN
 			countOut <= count;
-		else
+		ELSE
 			countOut <= countOut;
-		end if;
+		END IF;
 
-	end process;
+	END PROCESS;
 
-	conv : work.conv_MMSS port map (segs_in => countOut, min_u => min_u, min_d => min_d, seg_u => seg_u, seg_d => seg_d);
-	D_0 <= seg_u; 
+	conv : work.conv_MMSS PORT MAP (segs_in => countOut, min_u => min_u, min_d => min_d, seg_u => seg_u, seg_d => seg_d);
+	D_0 <= seg_u;
 	D_1 <= seg_d;
-	D_2 <= min_u; 
+	D_2 <= min_u;
 	D_3 <= min_d;
-end Behavioral;
+END Behavioral;

@@ -1,39 +1,38 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
-use IEEE.NUMERIC_STD.ALL;
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
+USE IEEE.NUMERIC_STD.ALL;
+ENTITY conv_Temp IS
+	PORT (
+		temp8 : IN STD_LOGIC_VECTOR(7 DOWNTO 0); -- temperatura em binário
+		D_0 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+		D_1 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+		D_2 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+		D_3 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+		ALARM : OUT STD_LOGIC
+	);
+END conv_Temp;
 
+ARCHITECTURE Behavioral OF conv_Temp IS
+	SIGNAL temp : INTEGER;
+	CONSTANT inf_lim : INTEGER := 0;
+	CONSTANT max_lim : INTEGER := 30;
 
-entity conv_Temp is
-    Port (
-        temp8 : in STD_LOGIC_VECTOR(7 downto 0);  -- temperatura em binário
-		D_0 : out STD_LOGIC_VECTOR(3 downto 0);
-		D_1 : out STD_LOGIC_VECTOR(3 downto 0);
-		D_2 : out STD_LOGIC_VECTOR(3 downto 0);
-		D_3 : out STD_LOGIC_VECTOR(3 downto 0);
-		ALARM : out STD_LOGIC
-    );
-end conv_Temp;
-
-architecture Behavioral of conv_Temp is
-	signal temp : INTEGER;
-	constant inf_lim : INTEGER := 0; 
-    constant max_lim: INTEGER := 30;
-
-begin
+BEGIN
 	temp <= ((to_integer(unsigned(temp8)) * 120) / 255) - 40;
 	D_0 <= "1100"; -- C
-	process (temp)
-	begin
-		if temp < 0 then
+	PROCESS (temp)
+	BEGIN
+		IF temp < 0 THEN
 			D_3 <= "1010"; -- -
-		else
+		ELSE
 			D_3 <= "1101"; -- Desligado
-		end if;
-	end process;
+		END IF;
+	END PROCESS;
 
-	D_2 <= STD_LOGIC_VECTOR(to_unsigned((temp/10) mod 10, 4));
-	D_1 <= STD_LOGIC_VECTOR(to_unsigned((temp) mod 10, 4));
-	ALARM <= '0' when (temp >= inf_lim) and (temp <= max_lim) else '1';
+	D_2 <= STD_LOGIC_VECTOR(to_unsigned((temp/10) MOD 10, 4));
+	D_1 <= STD_LOGIC_VECTOR(to_unsigned((temp) MOD 10, 4));
+	ALARM <= '0' WHEN (temp >= inf_lim) AND (temp <= max_lim) ELSE
+		'1';
 
-end Behavioral;
+END Behavioral;

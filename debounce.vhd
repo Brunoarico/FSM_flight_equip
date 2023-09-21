@@ -1,46 +1,47 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.NUMERIC_STD.ALL;
 
-entity DeBounce is
-    port(   Clk : in STD_LOGIC;
-            button_in : in STD_LOGIC;
-            pulse_out : out STD_LOGIC
-        );
-end DeBounce;
+ENTITY DeBounce IS
+	PORT (
+		Clk : IN STD_LOGIC;
+		button_in : IN STD_LOGIC;
+		pulse_out : OUT STD_LOGIC
+	);
+END DeBounce;
 
-architecture Behavioral of DeBounce is
-	constant COUNT_MAX : INTEGER := 100; 
-	constant BTN_ACTIVE : STD_LOGIC := '1';
-	signal count : INTEGER := 0;
-	type STATE_TYPE is (idle,wait_time); --state machine
-	signal state : state_type := idle;
-begin
-  
-	process(Clk)
-	begin
+ARCHITECTURE Behavioral OF DeBounce IS
+	CONSTANT COUNT_MAX : INTEGER := 100;
+	CONSTANT BTN_ACTIVE : STD_LOGIC := '0';
+	SIGNAL count : INTEGER := 0;
+	TYPE STATE_TYPE IS (idle, wait_time); --state machine
+	SIGNAL state : state_type := idle;
+BEGIN
 
-		if(rising_edge(Clk)) then
-			case (state) is
-				when idle =>
-					if(button_in = BTN_ACTIVE) then  
+	PROCESS (Clk)
+	BEGIN
+
+		IF (rising_edge(Clk)) THEN
+			CASE (state) IS
+				WHEN idle =>
+					IF (button_in = BTN_ACTIVE) THEN
 						state <= wait_time;
-					else
-						state <= idle; 
-					end if;
+					ELSE
+						state <= idle;
+					END IF;
 					pulse_out <= '0';
-				when wait_time =>
-					if(count = COUNT_MAX) then
+				WHEN wait_time =>
+					IF (count = COUNT_MAX) THEN
 						count <= 0;
-						if(button_in = BTN_ACTIVE) then
+						IF (button_in = BTN_ACTIVE) THEN
 							pulse_out <= '1';
-						end if;
-						state <= idle;  
-					else
+						END IF;
+						state <= idle;
+					ELSE
 						count <= count + 1;
-					end if; 
-			end case;       
-		end if;        
-	end process;                  
-                                                                                
-end architecture Behavioral;
+					END IF;
+			END CASE;
+		END IF;
+	END PROCESS;
+
+END ARCHITECTURE Behavioral;
