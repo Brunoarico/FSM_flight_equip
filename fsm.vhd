@@ -6,27 +6,36 @@ USE IEEE.NUMERIC_STD.ALL;
 ENTITY FSM IS
 	PORT (
 		BTN0 : IN STD_LOGIC;
+		NOTF_AL : IN STD_LOGIC;
+		SEL_AL : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
+		FLAG_C : IN STD_LOGIC;
 		SEL : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
-		-- ALARM : OUT STD_LOGIC(2 DOWNTO 0)
 	);
 END FSM;
 
 ARCHITECTURE Behavioral OF FSM IS
-		SIGNAL S : STD_LOGIC_VECTOR(1 DOWNTO 0) := "00";
+	SIGNAL S : STD_LOGIC_VECTOR(1 DOWNTO 0) := "01";
+
 BEGIN
 
 	PROCESS (BTN0)
 	BEGIN
-		IF rising_edge(BTN0) AND S = "00" THEN
+		IF (FLAG_C = '0') THEN
+			IF rising_edge(BTN0) AND S = "00" THEN
+				S <= "01";
+			ELSIF rising_edge(BTN0) AND S = "01" THEN
+				S <= "10";
+			ELSIF rising_edge(BTN0) AND S = "10" THEN
+				S <= "11";
+			ELSIF rising_edge(BTN0) AND S = "11" THEN
+				S <= "00";
+			END IF;
+		ELSIF (FLAG_C = '1') THEN
 			S <= "01";
-		ELSIF rising_edge(BTN0) AND S = "01" THEN
-			S <= "10";
-		ELSIF rising_edge(BTN0) AND S = "10" THEN
-			S <= "11";
-		ELSIF rising_edge(BTN0) AND S = "11" THEN
-			S <= "00";
 		END IF;
 	END PROCESS;
 
-	SEL <= S;
+	SEL <= S WHEN NOTF_AL = '0' ELSE
+		SEL_AL;
+
 END Behavioral;

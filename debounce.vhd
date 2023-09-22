@@ -11,7 +11,7 @@ ENTITY DeBounce IS
 END DeBounce;
 
 ARCHITECTURE Behavioral OF DeBounce IS
-	CONSTANT COUNT_MAX : INTEGER := 100;
+	CONSTANT COUNT_MAX : INTEGER := 10000;
 	CONSTANT BTN_ACTIVE : STD_LOGIC := '0';
 	SIGNAL count : INTEGER := 0;
 	TYPE STATE_TYPE IS (idle, wait_time); --state machine

@@ -13,9 +13,12 @@ END conv_Temp;
 ARCHITECTURE Behavioral OF conv_Temp IS
 	CONSTANT inf_lim : INTEGER := 0;
 	CONSTANT max_lim : INTEGER := 30;
-	SIGNAL t : INTEGER;
+	SIGNAL t : INTEGER RANGE -40 TO 80;
+	SIGNAL AL : STD_LOGIC;
 BEGIN
 	t <= ((to_integer(unsigned(temp8)) * 120) / 255) - 40;
-	ALARM <= '0' WHEN (t >= inf_lim) AND (t <= max_lim) ELSE'1';
+	AL <= '0' WHEN (t >= inf_lim) AND (t <= max_lim) ELSE
+		'1';
 	temp <= t;
+	ALARM <= AL;
 END Behavioral;

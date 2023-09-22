@@ -15,10 +15,11 @@ ARCHITECTURE Behavioral OF conv_Psi IS
 	SIGNAL p : INTEGER;
 	CONSTANT inf_lim : INTEGER := 10;
 	CONSTANT max_lim : INTEGER := 20;
-
+	SIGNAL AL : STD_LOGIC;
 BEGIN
 	p <= ((to_integer(unsigned(psi8)) * 100) / 255);
-	ALARM <= '0' WHEN (p >= inf_lim) AND (p <= max_lim) ELSE '1';
+	AL <= '0' WHEN (p >= inf_lim) AND (p <= max_lim) ELSE
+		'1';
 	psi <= p;
-
+	ALARM <= AL;
 END Behavioral;

@@ -13,11 +13,13 @@ END conv_Alt;
 ARCHITECTURE Behavioral OF conv_Alt IS
 	SIGNAL a : INTEGER;
 	CONSTANT inf_lim : INTEGER := 0;
-	CONSTANT max_lim : INTEGER := 120;
+	CONSTANT max_lim : INTEGER := 100;
+	SIGNAL AL : STD_LOGIC;
 
 BEGIN
 	a <= ((to_integer(unsigned(alt8)) * 120) / 255);
-	ALARM <= '0' WHEN (a >= inf_lim) AND (a <= max_lim) ELSE '1';
+	AL <= '0' WHEN (a >= inf_lim) AND (a <= max_lim) ELSE
+		'1';
 	alt <= a;
-
+	ALARM <= AL;
 END Behavioral;
