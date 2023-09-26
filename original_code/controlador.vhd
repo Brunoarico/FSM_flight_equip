@@ -38,9 +38,9 @@ entity controlador is
            Psicometro : in STD_LOGIC;
            clk : in STD_LOGIC;
            secs : in integer;
-           temp_conv : in integer;
-           umid_conv : in integer;
-           altitude_conv : in integer;
+           temp_conv : in integer range -40 to 120;
+           umid_conv : in integer range 0 to 100;
+           altitude_conv : in integer range 0 to 120;
            saida : out integer;
            alarme : out STD_LOGIC;
            rst : in STD_LOGIC);

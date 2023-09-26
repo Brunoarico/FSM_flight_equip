@@ -67,7 +67,7 @@ begin
         elsif rising_edge(clk) then
             if state = continue then
                 count := count + 1;
-                if count = 50 then
+                if count = 50000000 then
                     count := 0;
                     if s_secs = 3599 then
                         s_secs <= 0;
